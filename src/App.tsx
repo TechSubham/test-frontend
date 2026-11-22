@@ -19,8 +19,8 @@ export default function App() {
   const [settingsPref, setSettingsPref] = useState<boolean | null>(null)
   const [scenarioId, setScenarioId] = useState('off')
 
-  // Developer panel: needs the frontend flag AND the backend reporting simulation enabled.
-  const showSimulation = config.simulationPanelFlag && health?.failure_simulation_enabled === true
+  // The backend health response is the source of truth for whether simulation is usable.
+  const showSimulation = health?.failure_simulation_enabled === true
   const simulateFailure = showSimulation
     ? (SIMULATION_SCENARIOS.find((s) => s.id === scenarioId)?.header ?? null)
     : null

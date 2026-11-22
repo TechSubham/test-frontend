@@ -30,7 +30,5 @@ services:
     envVars:
       - key: VITE_API_BASE_URL # backend URL, e.g. https://lyftr-backend.onrender.com (no trailing slash)
         sync: false
-      - key: VITE_ENABLE_SIMULATION_PANEL # shown only if the backend also enables simulation
-        value: "true"
       - key: NODE_VERSION
         value: "22"

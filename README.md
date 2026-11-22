@@ -25,10 +25,8 @@ Open http://localhost:3000. By default the frontend calls the backend at `http:/
 | Variable | Purpose |
 | --- | --- |
 | `VITE_API_BASE_URL` | Backend base URL at build time. Use `/api` on Vercel to send requests through its same-origin proxy. |
-| `VITE_ENABLE_SIMULATION_PANEL` | Enables the failure-simulation controls when the backend also enables them. |
 | `LYFTR_BACKEND_URL` | Backend origin for the Vercel server-side API proxy. Set this in Vercel; it is not a browser variable. |
 | `API_BASE_URL` | Runtime API URL for the Docker/nginx deployment. |
-| `ENABLE_SIMULATION_PANEL` | Runtime flag for the Docker deployment's simulation controls. |
 
 Never put provider API keys in frontend environment variables. They belong in the backend environment only.
 
@@ -43,4 +41,4 @@ npm run preview # serve the production build locally
 
 ## Deploy
 
-See [DEPLOY.md](./DEPLOY.md) for Vercel, Render Static Site, and Docker deployment steps. For Vercel, set `VITE_API_BASE_URL=/api` and `LYFTR_BACKEND_URL` to the backend origin, then redeploy.
+See [DEPLOY.md](./DEPLOY.md) for Vercel, Render Static Site, and Docker deployment steps. For Vercel, set `VITE_API_BASE_URL=/api` and `LYFTR_BACKEND_URL` to the backend origin, then redeploy. Failure-simulation controls appear when backend health reports them enabled.

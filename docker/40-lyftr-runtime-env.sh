@@ -32,17 +32,7 @@ case "$host" in
     ;;
 esac
 
-panel="${ENABLE_SIMULATION_PANEL:-false}"
-case "$panel" in
-  true | false) ;;
-  *)
-    echo "lyftr: ENABLE_SIMULATION_PANEL must be true or false; using false" >&2
-    panel=false
-    ;;
-esac
-
 tmp="$out_dir/env.js.tmp"
-printf 'window.__ENV__ = { API_BASE_URL: "%s", ENABLE_SIMULATION_PANEL: "%s" };\n' \
-  "$(json_escape "$api")" "$panel" > "$tmp"
+printf 'window.__ENV__ = { API_BASE_URL: "%s" };\n' "$(json_escape "$api")" > "$tmp"
 mv "$tmp" "$out_dir/env.js"
-echo "lyftr: runtime config API_BASE_URL=${api:-<build-time default>} ENABLE_SIMULATION_PANEL=$panel"
+echo "lyftr: runtime config API_BASE_URL=${api:-<build-time default>}"

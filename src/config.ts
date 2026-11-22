@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    __ENV__?: { API_BASE_URL?: string; ENABLE_SIMULATION_PANEL?: string }
+    __ENV__?: { API_BASE_URL?: string }
   }
 }
 
@@ -16,9 +16,6 @@ export const config = {
     pick(runtime.API_BASE_URL, import.meta.env.VITE_API_BASE_URL) ??
     (import.meta.env.PROD ? '/api' : 'http://localhost:8000')
   ).replace(/\/+$/, ''),
-  simulationPanelFlag:
-    (pick(runtime.ENABLE_SIMULATION_PANEL, import.meta.env.VITE_ENABLE_SIMULATION_PANEL) ??
-      'false') === 'true',
   requestTimeoutMs: 60_000,
   healthPollMs: 30_000,
   messageMaxChars: 4000,

@@ -16,7 +16,7 @@ same-origin serverless proxy so browser privacy filters do not block the Render 
 Render → **New → Static Site** → repo →
 - Build Command: `npm ci && npm run build`
 - Publish Directory: `dist`
-- Environment: `VITE_API_BASE_URL=https://<backend>.onrender.com`, `VITE_ENABLE_SIMULATION_PANEL=true`, `NODE_VERSION=22`
+- Environment: `VITE_API_BASE_URL=https://<backend>.onrender.com`, `NODE_VERSION=22`
 - Redirects/Rewrites: source `/*` → destination `/index.html`, action **Rewrite**
 
 ## Notes
@@ -26,8 +26,8 @@ Render → **New → Static Site** → repo →
   hosts, call the backend directly and allow the static site's origin in backend `ALLOWED_ORIGINS`.
 - `public/env.js` is an empty placeholder here, so the build-time values are used. (The
   `Dockerfile` variant instead writes `env.js` at container start — for Docker hosting.)
-- The failure-simulation panel appears only when `VITE_ENABLE_SIMULATION_PANEL=true` **and** the
-  backend's `/health` reports `failure_simulation_enabled: true`.
+- The failure-simulation panel appears when the backend's `/health` reports
+  `failure_simulation_enabled: true`; backend readiness is the source of truth.
 
 ## Run locally
 ```bash
