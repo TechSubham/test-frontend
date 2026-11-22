@@ -13,7 +13,8 @@ function pick(...values: (string | undefined)[]): string | undefined {
 /** Runtime env.js (Docker) wins over build-time VITE_* (Vercel/dev); then the local default. */
 export const config = {
   apiBaseUrl: (
-    pick(runtime.API_BASE_URL, import.meta.env.VITE_API_BASE_URL) ?? 'http://localhost:8000'
+    pick(runtime.API_BASE_URL, import.meta.env.VITE_API_BASE_URL) ??
+    (import.meta.env.PROD ? '/api' : 'http://localhost:8000')
   ).replace(/\/+$/, ''),
   simulationPanelFlag:
     (pick(runtime.ENABLE_SIMULATION_PANEL, import.meta.env.VITE_ENABLE_SIMULATION_PANEL) ??
