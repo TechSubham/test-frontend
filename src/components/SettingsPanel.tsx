@@ -35,27 +35,27 @@ export function SettingsPanel({
     .join(', ')
 
   return (
-    <section className="rounded-xl border border-line bg-paper" aria-label="Chat settings">
+    <section className="rounded-2xl border border-[#eceef4] bg-white/90 shadow-[0_4px_18px_rgba(47,49,73,0.035)]" aria-label="Chat settings">
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
-        className="flex w-full items-center gap-2 rounded-xl px-4 py-2.5 text-left text-sm"
+        className="flex w-full items-center gap-2 rounded-2xl px-4 py-3 text-left text-sm"
       >
-        <SlidersHorizontal className="size-4 text-ink-500" aria-hidden />
-        <span className="font-medium text-ink-900">Chat settings</span>
-        <span className="min-w-0 flex-1 truncate text-muted">{summary}</span>
-        <ChevronDown className={`size-4 text-ink-500 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden />
+        <SlidersHorizontal className="size-4 text-[#8279e6]" aria-hidden />
+        <span className="font-semibold text-[#424558]">Chat settings</span>
+        <span className="min-w-0 flex-1 truncate text-[#9699a8]">{summary}</span>
+        <ChevronDown className={`size-4 text-[#999cab] transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden />
       </button>
 
       {open && (
-        <div id={panelId} className="space-y-4 border-t border-line px-4 pb-4 pt-3">
+        <div id={panelId} className="space-y-4 border-t border-[#f0f1f5] px-4 pb-4 pt-3">
           <div>
-            <label htmlFor={promptId} className="text-sm font-medium text-ink-900">
+            <label htmlFor={promptId} className="text-sm font-semibold text-[#424558]">
               System prompt
             </label>
-            <p className="mt-0.5 text-xs text-muted">
+            <p className="mt-0.5 text-xs text-[#898d9d]">
               Optional. Sent with your next message and kept by the server for this chat. Leave empty to keep the
               current one.
             </p>
@@ -67,7 +67,7 @@ export function SettingsPanel({
               maxLength={config.systemPromptMaxChars}
               onChange={(e) => onSystemPromptChange(e.target.value)}
               placeholder="You are a helpful assistant."
-              className="mt-2 w-full resize-y rounded-lg border border-line bg-canvas px-3 py-2 text-sm leading-relaxed outline-none focus:border-ink-300 focus:bg-paper"
+              className="mt-2 w-full resize-y rounded-xl border border-[#e8eaf1] bg-[#fafbfe] px-3 py-2 text-sm leading-relaxed text-[#414558] outline-none focus:border-[#c8c3f4] focus:bg-white"
             />
           </div>
 

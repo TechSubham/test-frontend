@@ -49,7 +49,7 @@ export function AssistantMessage({ content, metadata }: Props) {
   return (
     <article
       data-testid="assistant-message"
-      className="rounded-xl border border-line bg-paper px-4 py-3.5 shadow-[0_1px_0_rgba(28,43,63,0.04)] sm:px-5"
+      className="rounded-[20px] border border-[#eff0f5] bg-white px-4 py-4 shadow-[0_5px_18px_rgba(45,47,70,0.035)] sm:px-5"
       aria-label="Assistant reply"
     >
       <Markdown>{content}</Markdown>

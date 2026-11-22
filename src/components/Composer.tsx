@@ -1,4 +1,4 @@
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, CornerDownLeft, Sparkles } from 'lucide-react'
 import { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { config } from '../config'
 
@@ -45,11 +45,11 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer({ di
   }
 
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-line bg-paper p-2 shadow-[0_2px_12px_rgba(28,43,63,0.06)] focus-within:border-ink-300">
+    <form onSubmit={submit} className="composer-card rounded-[24px] border border-[#e8eaf1] bg-white p-3 shadow-[0_10px_32px_rgba(50,52,79,0.075)] transition focus-within:border-[#c9c5f6] focus-within:shadow-[0_12px_34px_rgba(103,94,204,0.11)] sm:p-4">
       <label htmlFor="chat-input" className="sr-only">
         Message
       </label>
-      <div className="flex items-end gap-2">
+      <div className="flex items-end gap-3">
         <textarea
           id="chat-input"
           ref={textarea}
@@ -58,23 +58,24 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer({ di
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
-          placeholder="Message Lyftr"
+          placeholder="Ask Lyftr anything..."
           aria-describedby="composer-hint"
           aria-invalid={tooLong || undefined}
-          className="max-h-[220px] min-h-[2.75rem] flex-1 resize-none bg-transparent px-3 py-2.5 text-[0.95rem] leading-relaxed text-ink-950 outline-none placeholder:text-ink-500"
+          className="max-h-[220px] min-h-[4.25rem] flex-1 resize-none bg-transparent px-2 py-2.5 text-[0.95rem] leading-relaxed text-[#303345] outline-none placeholder:text-[#a3a6b3]"
         />
         <button
           type="submit"
           data-testid="send-button"
           disabled={!canSend}
           aria-label="Send message"
-          className="mb-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-ink-900 text-white transition-colors hover:bg-ink-700 disabled:cursor-not-allowed disabled:bg-ink-100 disabled:text-ink-500"
+          className="mb-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#8278f5] to-[#5e59d7] text-white shadow-[0_5px_14px_rgba(105,96,219,0.25)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:bg-[#ececf2] disabled:bg-none disabled:text-[#a8abb7] disabled:shadow-none"
         >
           <ArrowUp className="size-5" aria-hidden />
         </button>
       </div>
-      <div id="composer-hint" className="flex items-center justify-between px-3 pb-0.5 pt-1 text-xs text-muted">
-        <span className="hidden sm:inline">Enter to send, Shift + Enter for a new line</span>
+      <div id="composer-hint" className="flex items-center justify-between border-t border-[#f0f1f5] px-2 pb-0.5 pt-2.5 text-[11px] text-[#9a9eac]">
+        <span className="inline-flex items-center gap-1.5"><Sparkles className="size-3.5 text-[#8b83eb]" aria-hidden /> Your thoughts, made clearer</span>
+        <span className="hidden items-center gap-1 sm:inline-flex"><CornerDownLeft className="size-3" aria-hidden /> Enter to send · Shift + Enter for a new line</span>
         <span className="sm:hidden">Enter to send</span>
         {length >= COUNTER_FROM && (
           <span className={`tabular ${tooLong ? 'font-medium text-fail' : ''}`}>
