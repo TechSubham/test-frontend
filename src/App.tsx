@@ -26,12 +26,12 @@ export default function App() {
     : null
   const settings = useMemo(() => ({ simulateFailure }), [simulateFailure])
 
-  const { active, pending } = chat
+  const { active, pending, newChat } = chat
   const startNewChat = useCallback(() => {
-    chat.newChat()
+    newChat()
     setSettingsPref(null)
     setSidebarOpen(false)
-  }, [chat.newChat])
+  }, [newChat])
   const settingsOpen = settingsPref ?? active.messages.length === 0
   const chats = useMemo(() => chat.state.order.map((id) => chat.state.chats[id]!), [chat.state])
 

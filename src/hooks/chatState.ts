@@ -98,20 +98,11 @@ export function fromHistory(messages: HistoryMessage[]): UiMessage[] {
 export function chatReducer(state: ChatState, action: ChatAction): ChatState {
   switch (action.type) {
     case 'new_chat':
-      {
-        const keep = state.order.filter((id) => {
-          const chat = state.chats[id]
-          return chat && (chat.turns > 0 || chat.messages.length > 0 || chat.history === 'loading')
-        })
-        const chats: Record<string, Chat> = {}
-        for (const id of keep) chats[id] = state.chats[id]!
-        chats[action.sessionId] = emptyChat(action.sessionId)
-        return {
-          ...state,
-          chats,
-          order: [action.sessionId, ...keep],
-          activeId: action.sessionId,
-        }
+      return {
+        ...state,
+        chats: { ...state.chats, [action.sessionId]: emptyChat(action.sessionId) },
+        order: [action.sessionId, ...state.order],
+        activeId: action.sessionId,
       }
     case 'select':
       return state.chats[action.sessionId] ? { ...state, activeId: action.sessionId } : state
