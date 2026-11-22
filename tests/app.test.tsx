@@ -84,6 +84,37 @@ describe('session initialisation', () => {
     expect(backend.historyCalls()[0]?.path).toBe(`/sessions/${storedSession}/messages`)
   })
 
+  it('persists a chat created in this app across a page reload', async () => {
+    const backend = mockBackend({
+      onHistory: (call) => {
+        const id = call.path.split('/')[2]!
+        return {
+          status: 200,
+          body: {
+            session_id: id,
+            messages: [
+              { role: 'user', content: 'My saved question', created_at: '2026-11-21T10:00:00.000Z' },
+              { role: 'assistant', content: 'My saved answer', created_at: '2026-11-21T10:00:01.000Z' },
+            ],
+          },
+        }
+      },
+    })
+    const firstPage = setup()
+    const oldSession = sessionId()
+    await sendMessage(firstPage.user, 'My saved question')
+    await screen.findByText('Answer to: My saved question')
+    firstPage.unmount()
+
+    const secondPage = setup()
+    expect(sessionId()).not.toBe(oldSession)
+    await secondPage.user.click(
+      within(screen.getByTestId('chat-list')).getByRole('button', { name: /My saved question/ }),
+    )
+    expect(await screen.findByText('My saved answer')).toBeInTheDocument()
+    expect(backend.historyCalls().at(-1)?.path).toBe(`/sessions/${oldSession}/messages`)
+  })
+
   it('does not request history for a brand-new session', async () => {
     const backend = mockBackend()
     setup()
