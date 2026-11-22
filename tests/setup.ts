@@ -10,5 +10,6 @@ Element.prototype.scrollIntoView = vi.fn()
 
 afterEach(() => {
   cleanup()
+  window.localStorage.clear()
   vi.unstubAllGlobals()
 })

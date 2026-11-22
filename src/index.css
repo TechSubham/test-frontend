@@ -36,11 +36,13 @@
   body,
   #root {
     height: 100%;
+    min-height: 100dvh;
   }
   body {
     @apply text-ink-950 font-sans antialiased;
     background-color: #eff1f5;
     font-feature-settings: 'ss01';
+    overflow: hidden;
   }
   :focus-visible {
     outline: 2px solid var(--color-live);
@@ -55,43 +57,12 @@
     radial-gradient(ellipse at 58% 66%, rgba(197, 239, 240, 0.1), transparent 30%);
 }
 
-.lyftr-orb {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 34% 24%, rgba(255,255,255,0.96) 0 7%, transparent 29%),
-    radial-gradient(circle at 68% 72%, #aaa2ff 0, #8d91fb 35%, #b9d3ff 67%, #f5c8f7 100%);
-  box-shadow: inset -5px -7px 12px rgba(104, 96, 207, 0.14), 0 9px 24px rgba(132, 122, 235, 0.24);
-  animation: orb-float 5s ease-in-out infinite;
-}
-
-.lyftr-orb::after {
-  position: absolute;
-  inset: 2px;
-  border: 1px solid rgba(255,255,255,0.55);
-  border-radius: inherit;
-  content: '';
-}
-
-.lyftr-orb-small {
-  width: 25px;
-  height: 25px;
-  animation-duration: 6s;
-}
-
 .lyftr-gradient-text {
   color: #7169dc;
   background: linear-gradient(95deg, #6863d4 8%, #8b72dc 58%, #647fd0 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-@keyframes orb-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
 }
 
 @utility tabular {
@@ -201,8 +172,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .lyftr-orb {
-    animation: none;
   }
 }

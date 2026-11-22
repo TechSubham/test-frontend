@@ -10,7 +10,6 @@ export function EmptyState({ onPick, disabled }: { onPick: (text: string) => voi
 
   return (
     <div className="w-full text-center" data-testid="empty-state">
-      <div className="lyftr-orb mx-auto mb-6" aria-hidden="true" />
       <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#a0a3b2]">Your AI workspace</p>
       <h1 className="text-[1.8rem] font-semibold leading-tight tracking-[-0.045em] text-[#252839] sm:text-[2.35rem]">
         {greeting} <span className="lyftr-gradient-text">How can I help?</span>

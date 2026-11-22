@@ -51,7 +51,7 @@ export function Sidebar({ chats, activeId, onSelect, onNewChat, health, healthSt
         data-testid="sidebar"
         data-open={open}
         aria-label="Chats"
-        className={`fixed inset-y-0 left-0 z-40 flex w-[258px] flex-col border-r border-[#edf0f5] bg-[#f8f9fc] text-[#656a7c] transition-transform md:static md:z-auto md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-[min(258px,88vw)] flex-col border-r border-[#edf0f5] bg-[#f8f9fc] text-[#656a7c] transition-transform md:static md:z-auto md:w-[258px] md:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -112,7 +112,7 @@ export function Sidebar({ chats, activeId, onSelect, onNewChat, health, healthSt
             })}
           </ul>
           <p className="px-2 pt-3 text-[11px] leading-relaxed text-[#a1a5b3]">
-            Reloading the page starts a new session. Chats stay on the server.
+            Chats are saved in this browser and stay on the server.
           </p>
         </nav>
 
@@ -122,7 +122,7 @@ export function Sidebar({ chats, activeId, onSelect, onNewChat, health, healthSt
             {status.label}
           </p>
           {health && (
-            <p className="mt-1 text-ink-300">
+            <p className="mt-1 text-[#858a9a]">
               {health.keys_configured} keys, cache {health.cache_enabled ? 'on' : 'off'}
               {health.model ? <span className="block truncate text-[#989cab]">{health.model}</span> : null}
             </p>

@@ -27,6 +27,11 @@ export default function App() {
   const settings = useMemo(() => ({ simulateFailure }), [simulateFailure])
 
   const { active, pending } = chat
+  const startNewChat = useCallback(() => {
+    chat.newChat()
+    setSettingsPref(null)
+    setSidebarOpen(false)
+  }, [chat.newChat])
   const settingsOpen = settingsPref ?? active.messages.length === 0
   const chats = useMemo(() => chat.state.order.map((id) => chat.state.chats[id]!), [chat.state])
 
@@ -58,11 +63,7 @@ export default function App() {
           chat.selectChat(id)
           setSidebarOpen(false)
         }}
-        onNewChat={() => {
-          chat.newChat()
-          setSettingsPref(null)
-          setSidebarOpen(false)
-        }}
+        onNewChat={startNewChat}
         health={health}
         healthStatus={healthStatus}
         open={sidebarOpen}
@@ -84,7 +85,6 @@ export default function App() {
             <Menu className="size-5" aria-hidden />
           </button>
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="lyftr-orb lyftr-orb-small" aria-hidden="true" />
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold tracking-[-0.02em] text-[#252839]" data-testid="chat-title">
                 {active.title}
@@ -96,7 +96,7 @@ export default function App() {
           </div>
           <button
             type="button"
-            onClick={() => { chat.newChat(); setSettingsPref(null) }}
+            onClick={startNewChat}
             disabled={pending}
             className="inline-flex h-9 items-center gap-2 rounded-xl bg-[#20212a] px-3.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#383947] disabled:opacity-50"
             aria-label="Start a new chat"
@@ -105,7 +105,7 @@ export default function App() {
             <span className="hidden sm:inline">New chat</span>
             <span className="sm:hidden">New</span>
           </button>
-          <div className="ml-1 grid size-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#ffdbb2] to-[#e7b3ff] text-xs font-bold text-[#583d63]" aria-label="Lyftr profile">
+          <div className="ml-1 grid size-9 shrink-0 place-items-center rounded-full bg-[#f0f1f5] text-xs font-bold text-[#686c7b]" aria-hidden="true">
             L
           </div>
         </header>
@@ -142,7 +142,7 @@ export default function App() {
               </p>
             )}
 
-            {active.messages.length === 0 && !pending ? (
+            {active.messages.length === 0 && !pending && active.history !== 'loading' ? (
               <div className="flex flex-1 flex-col items-center justify-center pb-5 pt-8 sm:pt-12">
                 <EmptyState onPick={send} disabled={pending} />
                 <div className="mt-7 w-full max-w-[46rem]">
@@ -184,7 +184,7 @@ export default function App() {
           </div>
         </div>
 
-        {active.messages.length > 0 && <div className="border-t border-[#edf0f5] bg-white px-4 pb-4 pt-3 md:px-7"><div className="mx-auto w-full max-w-[46rem]"><Composer ref={composer} disabled={pending} onSend={send} /></div></div>}
+        {(active.messages.length > 0 || active.history === 'loading') && <div className="border-t border-[#edf0f5] bg-white px-4 pb-4 pt-3 md:px-7"><div className="mx-auto w-full max-w-[46rem]"><Composer ref={composer} disabled={pending} onSend={send} /></div></div>}
       </main>
       </div>
     </div>
