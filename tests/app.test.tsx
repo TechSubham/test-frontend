@@ -57,6 +57,33 @@ describe('session initialisation', () => {
     expect(sessionId()).not.toBe(a)
   })
 
+  it('keeps completed chats visible after refresh and reloads their server history when selected', async () => {
+    const storedSession = 's-12345678-1234-4234-8234-123456789abc'
+    const backend = mockBackend({
+      onHistory: () => ({
+        status: 200,
+        body: {
+          session_id: storedSession,
+          messages: [
+            { role: 'user', content: 'Remember this chat', created_at: '2026-11-21T10:00:00.000Z' },
+            { role: 'assistant', content: 'This reply came from the server', created_at: '2026-11-21T10:00:01.000Z' },
+          ],
+        },
+      }),
+    })
+    window.localStorage.setItem(
+      'lyftr.chat-index.v1',
+      JSON.stringify([{ sessionId: storedSession, title: 'Remember this chat', turns: 1, systemPrompt: '' }]),
+    )
+
+    const { user } = setup()
+    expect(sessionId()).not.toBe(storedSession)
+    await user.click(within(screen.getByTestId('chat-list')).getByRole('button', { name: /Remember this chat/ }))
+
+    expect(await screen.findByText('This reply came from the server')).toBeInTheDocument()
+    expect(backend.historyCalls()[0]?.path).toBe(`/sessions/${storedSession}/messages`)
+  })
+
   it('does not request history for a brand-new session', async () => {
     const backend = mockBackend()
     setup()

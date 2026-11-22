@@ -1,7 +1,53 @@
-import { useCallback, useLayoutEffect, useMemo, useReducer, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef } from 'react'
 import { ApiError, api } from '../api/client'
 import { localId, newSessionId } from '../lib/session'
-import { chatReducer, initialState, type Chat, type ChatState } from './chatState'
+import { chatReducer, emptyChat, initialState, type Chat, type ChatState } from './chatState'
+
+const CHAT_INDEX_KEY = 'lyftr.chat-index.v1'
+
+interface StoredChat {
+  sessionId: string
+  title: string
+  turns: number
+  systemPrompt: string
+}
+
+function loadInitialState(): ChatState {
+  let saved: unknown
+  try {
+    saved = JSON.parse(window.localStorage.getItem(CHAT_INDEX_KEY) ?? '[]')
+  } catch {
+    saved = []
+  }
+
+  const fresh = initialState(newSessionId())
+  const chats = { ...fresh.chats }
+  const order = [...fresh.order]
+  if (!Array.isArray(saved)) return fresh
+
+  for (const item of saved) {
+    if (
+      !item ||
+      typeof item.sessionId !== 'string' ||
+      !/^s-[a-zA-Z0-9-]{1,126}$/.test(item.sessionId) ||
+      item.sessionId === fresh.activeId ||
+      typeof item.title !== 'string' ||
+      typeof item.turns !== 'number' ||
+      !Number.isInteger(item.turns) ||
+      item.turns < 1 ||
+      chats[item.sessionId]
+    ) continue
+    const chat = emptyChat(item.sessionId)
+    chats[item.sessionId] = {
+      ...chat,
+      title: item.title.slice(0, 120) || 'Chat',
+      turns: item.turns,
+      systemPrompt: typeof item.systemPrompt === 'string' ? item.systemPrompt : '',
+    }
+    order.push(item.sessionId)
+  }
+  return { ...fresh, chats, order }
+}
 
 export interface SendSettings {
   simulateFailure: string | null
@@ -20,13 +66,27 @@ export interface UseChat {
 
 export function useChat(): UseChat {
   // The assignment requires a distinct client session for each page load.
-  const [state, dispatch] = useReducer(chatReducer, undefined, () => initialState(newSessionId()))
+  const [state, dispatch] = useReducer(chatReducer, undefined, loadInitialState)
   const inFlight = useRef(false)
   const stateRef = useRef(state)
   // Event handlers read the latest state through this ref (synced before paint).
   useLayoutEffect(() => {
     stateRef.current = state
   }, [state])
+
+  useEffect(() => {
+    const saved: StoredChat[] = state.order.flatMap((id) => {
+      const chat = state.chats[id]
+      return chat && chat.turns > 0
+        ? [{ sessionId: chat.sessionId, title: chat.title, turns: chat.turns, systemPrompt: chat.systemPrompt }]
+        : []
+    })
+    try {
+      window.localStorage.setItem(CHAT_INDEX_KEY, JSON.stringify(saved))
+    } catch {
+      // Chat history remains available on the backend if browser storage is unavailable.
+    }
+  }, [state.chats, state.order])
 
   const active = state.chats[state.activeId]!
 
